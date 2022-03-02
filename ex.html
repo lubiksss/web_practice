@@ -6,9 +6,17 @@
 </head>
 <body>
     <script>
-        function sum2(left, right) {
-            return left + right;
+        var coworkers = {
+            "programmer":"egoing",
+            "designer":"leezche",
+            "bookkeeper": "duru"
+        };
+        coworkers.showAll = function(){
+            for(var key in this){
+                document.write(key + ": " + this[key]+"<br>");
+            }
         }
+        coworkers.showAll();
     </script>
 </body>
 </html>
