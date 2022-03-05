@@ -133,11 +133,10 @@ var app = http.createServer(function (request, response) {
                 });
                 request.on('end', function () {
                     var post = qs.parse(body);
-                    db.query('UPDATE topic SET title=?, describtion=?, author_id=1 WHERE id=?'
-                        , [post.title, post.description, post.id], function (error, result) {
-                            response.writeHead(302, {Location: `/?id=${post.id}`});
-                            response.end();
-                        });
+                    db.query('UPDATE topic SET title=?, description=?, author_id=1 WHERE id=?', [post.title, post.description, post.id], function (error, result) {
+                        response.writeHead(302, {Location: `/?id=${post.id}`});
+                        response.end();
+                    })
                 });
             } else if (pathname === '/delete_process') {
                 var body = '';
@@ -146,8 +145,10 @@ var app = http.createServer(function (request, response) {
                 });
                 request.on('end', function () {
                     var post = qs.parse(body);
-                    var id = post.id;
-                    fs.unlink(`data/${id}`, function (error) {
+                    db.query('DELETE FROM topic WHERE id = ?', [post.id], function (error, result) {
+                        if (error) {
+                            throw error;
+                        }
                         response.writeHead(302, {Location: `/`});
                         response.end();
                     });
