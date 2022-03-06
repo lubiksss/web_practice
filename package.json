@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/lubiksss/web_practice/issues"
   },
-  "homepage": "https://github.com/lubiksss/web_practice#readme"
+  "homepage": "https://github.com/lubiksss/web_practice#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
 }
