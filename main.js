@@ -3,9 +3,13 @@ const url = require('url');
 const topic = require('./lib/topic');
 const author = require('./lib/author');
 const express = require('express')
+const bodyParser = require("body-parser");
+const {request} = require("express");
 const app = express()
 const port = 3000
 
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({extended: false}));
 //route, routing
 app.get('/', (request, response) => {
     topic.home(request, response);
@@ -28,6 +32,9 @@ app.post('/update_process', (request, response) => {
 app.post('/delete_process', (request, response) => {
     topic.delete(request, response);
 })
+app.use(function (req, res, next) {
+    res.status(404).send('Sorry cant find that!');
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
