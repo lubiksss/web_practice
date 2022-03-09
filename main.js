@@ -5,11 +5,16 @@ const author = require('./lib/author');
 const express = require('express')
 const bodyParser = require("body-parser");
 const {request} = require("express");
+const compression = require('compression')
+const helmet = require('helmet')
 const app = express()
 const port = 3000
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(compression());
+app.use(helmet());
+
 //route, routing
 app.get('/', (request, response) => {
     topic.home(request, response);
