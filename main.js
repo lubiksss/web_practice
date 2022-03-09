@@ -5,6 +5,8 @@ const compression = require('compression')
 const helmet = require('helmet')
 const app = express()
 const port = 3000
+const cookie = require('cookie');
+
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -14,6 +16,15 @@ app.use(helmet());
 //route, routing
 app.get('/', (request, response) => {
     topic.home(request, response);
+})
+app.get('/login', (request, response) => {
+    topic.login(request, response);
+})
+app.post('/login_process', (request, response) => {
+    topic.login_process(request, response);
+})
+app.get('/logout', (request, response) => {
+    topic.logout_process(request, response);
 })
 app.get('/page/:pageId', (request, response) => {
     topic.page(request, response);
