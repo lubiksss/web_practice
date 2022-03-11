@@ -1,37 +1,57 @@
 const topic = require('./lib/topic');
+const auth = require('./lib/auth');
 const express = require('express')
 const bodyParser = require("body-parser");
 const compression = require('compression')
 const helmet = require('helmet')
 const app = express()
 const port = 3000
+const session = require('express-session')
+const FileStore = require('session-file-store')(session);
+const fileStoreOptions = {};
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    store: new FileStore(fileStoreOptions)
+}))
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(compression());
 app.use(helmet());
 
+
 //route, routing
-app.get('/', (request, response) => {
-    topic.home(request, response);
+app.get('/', (req, res) => {
+    topic.home(req, res);
 })
-app.get('/page/:pageId', (request, response) => {
-    topic.page(request, response);
+app.get('/page/:pageId', (req, res) => {
+    topic.page(req, res);
 })
-app.get('/create', (request, response) => {
-    topic.create(request, response);
+app.get('/create', (req, res) => {
+    topic.create(req, res);
 })
-app.post('/create_process', (request, response) => {
-    topic.create_process(request, response);
+app.post('/create_process', (req, res) => {
+    topic.create_process(req, res);
 })
-app.get('/update/:pageId', (request, response) => {
-    topic.update(request, response);
+app.get('/update/:pageId', (req, res) => {
+    topic.update(req, res);
 })
-app.post('/update_process', (request, response) => {
-    topic.update_process(request, response);
+app.post('/update_process', (req, res) => {
+    topic.update_process(req, res);
 })
-app.post('/delete_process', (request, response) => {
-    topic.delete(request, response);
+app.post('/delete_process', (req, res) => {
+    topic.delete(req, res);
+})
+app.get('/login', (req, res) => {
+    auth.login(req, res);
+})
+app.post('/login_process', (req, res) => {
+    auth.login_process(req, res);
+})
+app.get('/logout', (req, res) => {
+    auth.logout(req, res);
 })
 app.use(function (req, res, next) {
     res.status(404).send('Sorry cant find that!');
@@ -44,24 +64,24 @@ app.listen(port, () => {
 
 /*
 
-var app = http.createServer(function (request, response) {
-            var _url = request.url;
+var app = http.createServer(function (req, res) {
+            var _url = req.url;
             var queryData = url.parse(_url, true).query;
             var pathname = url.parse(_url, true).pathname;
 
             } else if (pathname === '/author') {
-                author.home(request, response);
+                author.home(req, res);
             } else if (pathname === '/author/create_process') {
-                author.create_process(request, response);
+                author.create_process(req, res);
             } else if (pathname === '/author/update') {
-                author.update(request, response);
+                author.update(req, res);
             } else if (pathname === '/author/update_process') {
-                author.update_process(request, response);
+                author.update_process(req, res);
             } else if (pathname === '/author/delete_process') {
-                author.delete_process(request, response);
+                author.delete_process(req, res);
             } else {
-                response.writeHead(404);
-                response.end('Page Not Found');
+                res.writeHead(404);
+                res.end('Page Not Found');
             }
         }
     )
